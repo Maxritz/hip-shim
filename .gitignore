@@ -1,0 +1,29 @@
+# Build outputs
+build/
+bin/
+lib/
+*.dll
+*.lib
+*.exp
+*.pdb
+*.obj
+*.o
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Logs
+*.log
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+
+# IDE
+.vs/
+*.suo
+*.user
+*.sln.docstates

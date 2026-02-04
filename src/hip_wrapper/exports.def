@@ -1,0 +1,33 @@
+LIBRARY amdhip64
+EXPORTS
+    hipGetDeviceCount
+    hipGetDevice
+    hipSetDevice
+    hipGetDeviceProperties
+    hipGetDevicePropertiesR0600 = hipGetDeviceProperties
+    hipDeviceGetAttribute
+    hipDeviceSynchronize
+    hipDeviceReset
+    hipMalloc
+    hipFree
+    hipMemcpy
+    hipMemcpyAsync
+    hipMemset
+    hipMemsetAsync
+    hipMemGetInfo
+    hipHostMalloc
+    hipHostFree
+    hipMallocManaged
+    hipPointerGetAttributes
+    hipStreamCreate
+    hipStreamDestroy
+    hipStreamSynchronize
+    hipEventCreate
+    hipEventDestroy
+    hipEventRecord
+    hipEventSynchronize
+    hipGetLastError
+    hipGetErrorString
+    hipLaunchKernel
+    hipModuleLoad
+    hipModuleUnload
