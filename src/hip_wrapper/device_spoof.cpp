@@ -36,7 +36,7 @@ namespace hip_shim
     {
         // Cast to real HIP struct type (hipDeviceProp_tR0600)
         auto *real_props = reinterpret_cast<hipDeviceProp_tR0600 *>(props);
-        
+
         if (!real_props)
             return static_cast<int>(hipErrorInvalidValue);
         if (!initialized_ && !initialize(device_id))

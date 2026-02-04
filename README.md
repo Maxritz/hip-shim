@@ -47,6 +47,63 @@ $env:HIP_PATH = "C:\Program Files\AMD\ROCm\7.1"
 .\scripts\build.ps1 -BuildType Release
 ```
 
+### Build Example Test
+
+A standalone HIP runtime test is included to verify the shim works:
+
+```powershell
+# Build the test
+cd examples
+mkdir build
+cd build
+cmake .. -G "Visual Studio 17 2022" -A x64
+cmake --build . --config Release
+
+# Run with the shim
+cd Release
+copy ..\..\..\build\bin\Release\amdhip64.dll .\amdhip64_7.dll
+.\hip_runtime_test.exe
+```
+
+**Test Output (with shim):**
+```
+==============================================
+HIP Runtime Test - Device Properties
+==============================================
+
+Found 1 HIP device(s)
+
+=== Device 0 ===
+Name:              AMD Radeon RX 9070 XT
+Architecture:      gfx1100           ← Spoofed from gfx1201!
+Total Memory:      117.91 GB         ← Spoofed from 15.92 GB!
+Compute Units:     60                ← Spoofed from 32!
+Max Threads/Block: 1024
+Warp Size:         32
+Clock Rate:        2500 MHz
+Memory Clock:      16000 MHz
+Memory Bus Width:  192-bit
+Shared Mem/Block:  65536 bytes
+L2 Cache Size:     4194304 bytes
+
+=== Testing Memory Allocation ===
+Free Memory:  99.97 GB
+Total Memory: 117.91 GB
+
+Allocating 100 MB... SUCCESS (ptr=0000000304000000)
+Allocating 1 GB...  SUCCESS (ptr=000000030A400000)
+
+==============================================
+All tests completed!
+==============================================
+```
+
+This demonstrates the shim successfully:
+- ✅ Spoofs device architecture (gfx1201 → gfx1100)
+- ✅ Inflates memory (16GB → 118GB with system RAM)
+- ✅ Intercepts all HIP API calls
+- ✅ Allocates memory correctly
+
 ## Install
 
 ```powershell
@@ -60,6 +117,7 @@ $env:HIP_PATH = "C:\Program Files\AMD\ROCm\7.1"
 ## Test Results
 
 **Test System:**
+
 - CPU: AMD Ryzen 9 5900XT 16-Core
 - GPU: AMD Radeon RX 9070 XT (gfx1031, 16GB VRAM)
 - RAM: 96 GB
@@ -67,6 +125,7 @@ $env:HIP_PATH = "C:\Program Files\AMD\ROCm\7.1"
 - ROCm: 7.1
 
 **Spoofed Configuration:**
+
 - Architecture: gfx1100 (RDNA3)
 - Total Memory: **117.91 GB** (24GB VRAM + 96GB system RAM)
 - Compute Units: 60
@@ -127,15 +186,15 @@ All tests PASSED! ✓
 ==================================================
 ```
 
-| Test Category | Status | Details |
-|--------------|--------|---------|
-| Device Detection | ✅ PASS | Successfully enumerated 1 device |
-| Device Properties | ✅ PASS | Correctly spoofed to gfx1100 with 117.91 GB |
+| Test Category     | Status  | Details                                              |
+| ----------------- | ------- | ---------------------------------------------------- |
+| Device Detection  | ✅ PASS | Successfully enumerated 1 device                     |
+| Device Properties | ✅ PASS | Correctly spoofed to gfx1100 with 117.91 GB          |
 | Memory Allocation | ✅ PASS | Small (100MB) and large (1GB) allocations successful |
-| Memory Operations | ✅ PASS | Host↔Device copies and verification working |
-| Stream Operations | ✅ PASS | Create, sync, destroy working correctly |
-| Event Operations | ✅ PASS | Create, record, sync, destroy working correctly |
-| Memory Tracking | ✅ PASS | Proper allocation/deallocation tracking, 0 leaks |
+| Memory Operations | ✅ PASS | Host↔Device copies and verification working          |
+| Stream Operations | ✅ PASS | Create, sync, destroy working correctly              |
+| Event Operations  | ✅ PASS | Create, record, sync, destroy working correctly      |
+| Memory Tracking   | ✅ PASS | Proper allocation/deallocation tracking, 0 leaks     |
 
 See [TEST_RESULTS.md](TEST_RESULTS.md) for detailed logs and performance metrics.
 

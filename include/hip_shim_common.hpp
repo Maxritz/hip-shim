@@ -29,28 +29,33 @@ namespace hip_shim
         constexpr const char *LOG_FILE_PATH = "hip_shim.log";
 
         // Runtime config helpers (check env vars first, then use defaults)
-        inline const char* get_real_hip_dll_name() {
-            const char* env = getenv("HIP_SHIM_REAL_DLL");
+        inline const char *get_real_hip_dll_name()
+        {
+            const char *env = getenv("HIP_SHIM_REAL_DLL");
             return env ? env : REAL_HIP_DLL_NAME;
         }
 
-        inline const char* get_real_rocblas_dll_name() {
-            const char* env = getenv("HIP_SHIM_ROCBLAS_DLL");
+        inline const char *get_real_rocblas_dll_name()
+        {
+            const char *env = getenv("HIP_SHIM_ROCBLAS_DLL");
             return env ? env : REAL_ROCBLAS_DLL_NAME;
         }
 
-        inline const char* get_log_file_path() {
-            const char* env = getenv("HIP_SHIM_LOG_FILE");
+        inline const char *get_log_file_path()
+        {
+            const char *env = getenv("HIP_SHIM_LOG_FILE");
             return env ? env : LOG_FILE_PATH;
         }
 
-        inline bool get_debug_logging_enabled() {
-            const char* env = getenv("HIP_SHIM_DEBUG");
+        inline bool get_debug_logging_enabled()
+        {
+            const char *env = getenv("HIP_SHIM_DEBUG");
             return env ? (strcmp(env, "1") == 0 || strcmp(env, "true") == 0) : ENABLE_DEBUG_LOGGING;
         }
 
-        inline size_t get_vram_headroom_percent() {
-            const char* env = getenv("HIP_SHIM_VRAM_HEADROOM");
+        inline size_t get_vram_headroom_percent()
+        {
+            const char *env = getenv("HIP_SHIM_VRAM_HEADROOM");
             return env ? static_cast<size_t>(atoi(env)) : VRAM_HEADROOM_PERCENT;
         }
     }
@@ -82,7 +87,7 @@ namespace hip_shim
             {
                 fclose(log_file_);
             }
-            const char* log_path = path ? path : config::get_log_file_path();
+            const char *log_path = path ? path : config::get_log_file_path();
             fopen_s(&log_file_, log_path, "w");
         }
 

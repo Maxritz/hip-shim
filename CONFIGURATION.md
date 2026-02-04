@@ -7,24 +7,28 @@ The HIP shim can be customized at runtime using environment variables. No recomp
 ### DLL Loading
 
 **`HIP_SHIM_REAL_DLL`**  
-Name of the real HIP DLL to load.  
+Name of the real HIP DLL to load.
+
 - **Default:** `amdhip64_7_real.dll`
 - **Example:** `set HIP_SHIM_REAL_DLL=amdhip64_custom.dll`
 
 **`HIP_SHIM_ROCBLAS_DLL`**  
-Name of the real ROCBlas DLL to load.  
+Name of the real ROCBlas DLL to load.
+
 - **Default:** `rocblas_real.dll`
 - **Example:** `set HIP_SHIM_ROCBLAS_DLL=rocblas_custom.dll`
 
 ### Logging
 
 **`HIP_SHIM_LOG_FILE`**  
-Path to the log file.  
+Path to the log file.
+
 - **Default:** `hip_shim.log`
 - **Example:** `set HIP_SHIM_LOG_FILE=C:\logs\hip_debug.log`
 
 **`HIP_SHIM_DEBUG`**  
-Enable/disable debug logging.  
+Enable/disable debug logging.
+
 - **Default:** `1` (enabled)
 - **Values:** `1`, `true` (enabled) or `0`, `false` (disabled)
 - **Example:** `set HIP_SHIM_DEBUG=0`
@@ -32,13 +36,15 @@ Enable/disable debug logging.
 ### Memory Management
 
 **`HIP_SHIM_VRAM_HEADROOM`**  
-Percentage of VRAM to reserve as headroom.  
+Percentage of VRAM to reserve as headroom.
+
 - **Default:** `10` (10%)
 - **Example:** `set HIP_SHIM_VRAM_HEADROOM=5`
 
 ## Usage Examples
 
 ### Windows CMD
+
 ```cmd
 set HIP_SHIM_REAL_DLL=amdhip64_7_real.dll
 set HIP_SHIM_LOG_FILE=debug.log
@@ -47,6 +53,7 @@ your_app.exe
 ```
 
 ### PowerShell
+
 ```powershell
 $env:HIP_SHIM_REAL_DLL="amdhip64_7_real.dll"
 $env:HIP_SHIM_LOG_FILE="debug.log"
@@ -55,6 +62,7 @@ $env:HIP_SHIM_DEBUG="1"
 ```
 
 ### Permanent Configuration (Windows)
+
 ```cmd
 setx HIP_SHIM_DEBUG 0
 setx HIP_SHIM_LOG_FILE "C:\logs\hip.log"
@@ -86,14 +94,18 @@ constexpr const char *LOG_FILE_PATH = "hip_shim.log";
 ## Troubleshooting
 
 ### DLL Not Found
+
 If you see "Failed to load ... : 126", the real DLL couldn't be found:
+
 1. Check `HIP_SHIM_REAL_DLL` is correct
 2. Verify the DLL exists in the same directory
 3. Ensure `HIP_PATH` environment variable is set
 4. Check the log file for details
 
 ### Debug Logging
+
 Enable verbose logging to diagnose issues:
+
 ```cmd
 set HIP_SHIM_DEBUG=1
 set HIP_SHIM_LOG_FILE=debug.log

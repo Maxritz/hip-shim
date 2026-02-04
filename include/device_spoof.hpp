@@ -17,7 +17,7 @@ namespace hip_shim
         }
 
         bool initialize(int device_id = 0);
-        int get_spoofed_properties(void *props, int device_id);  // Returns int (hipError_t typedef)
+        int get_spoofed_properties(void *props, int device_id); // Returns int (hipError_t typedef)
         int get_spoofed_attribute(int *value, hipDeviceAttribute_t attr, int device_id);
         int get_spoofed_mem_info(size_t *free, size_t *total);
 
