@@ -2,13 +2,14 @@
 
 ## Overview
 
-Wrapper DLL that enables unsupported AMD GPUs (RX 6700 XT / gfx1031) to work with ROCm 7.x applications.
+Wrapper DLL that enables unsupported AMD GPUs to work with ROCm 7.x applications by spoofing device properties.
 
-**Target Hardware**: AMD RX 6700 XT (gfx1031, 12GB VRAM, RDNA2)
+**Tested Hardware**: AMD RX 9070 XT (gfx1201, 16GB VRAM, RDNA4)
+**Also Works With**: RX 6700 XT (gfx1031, RDNA2) and other unsupported GPUs
 
 **Features**:
 
-- Device property spoofing (gfx1031 → gfx1100)
+- Device property spoofing (unsupported architectures → gfx1100 RDNA3)
 - VRAM + System RAM unified memory management
 - FP8 → INT8 conversion (future)
 - Transparent passthrough to real HIP runtime
@@ -37,7 +38,7 @@ $env:HIP_PATH = "C:\Program Files\AMD\ROCm\7.1"
 
 ## How It Works
 
-1. **Device Spoofing**: Reports gfx1100 instead of gfx1031
+1. **Device Spoofing**: Reports gfx1100 (RDNA3) instead of unsupported architectures (e.g., gfx1201/RDNA4, gfx1031/RDNA2)
 2. **Memory Expansion**: Combines VRAM + System RAM for larger models
 3. **Transparent Proxy**: All other HIP calls pass through to real runtime
 
