@@ -30,7 +30,7 @@ namespace hip_shim
             if (last_slash)
             {
                 *(last_slash + 1) = '\0';
-                strcat_s(dll_path, MAX_PATH, config::REAL_HIP_DLL_NAME);
+                strcat_s(dll_path, MAX_PATH, config::get_real_hip_dll_name());
             }
         }
 

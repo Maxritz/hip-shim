@@ -18,6 +18,7 @@ namespace hip_shim
 {
     namespace config
     {
+        // Default values (can be overridden by environment variables)
         constexpr size_t VRAM_HEADROOM_PERCENT = 10;
         constexpr size_t MIN_SYSTEM_RAM_RESERVE_MB = 2048;
         constexpr size_t ALLOCATION_ALIGNMENT = 256;
@@ -26,6 +27,32 @@ namespace hip_shim
         constexpr const char *REAL_HIP_DLL_NAME = "amdhip64_7_real.dll";
         constexpr const char *REAL_ROCBLAS_DLL_NAME = "rocblas_real.dll";
         constexpr const char *LOG_FILE_PATH = "hip_shim.log";
+
+        // Runtime config helpers (check env vars first, then use defaults)
+        inline const char* get_real_hip_dll_name() {
+            const char* env = getenv("HIP_SHIM_REAL_DLL");
+            return env ? env : REAL_HIP_DLL_NAME;
+        }
+
+        inline const char* get_real_rocblas_dll_name() {
+            const char* env = getenv("HIP_SHIM_ROCBLAS_DLL");
+            return env ? env : REAL_ROCBLAS_DLL_NAME;
+        }
+
+        inline const char* get_log_file_path() {
+            const char* env = getenv("HIP_SHIM_LOG_FILE");
+            return env ? env : LOG_FILE_PATH;
+        }
+
+        inline bool get_debug_logging_enabled() {
+            const char* env = getenv("HIP_SHIM_DEBUG");
+            return env ? (strcmp(env, "1") == 0 || strcmp(env, "true") == 0) : ENABLE_DEBUG_LOGGING;
+        }
+
+        inline size_t get_vram_headroom_percent() {
+            const char* env = getenv("HIP_SHIM_VRAM_HEADROOM");
+            return env ? static_cast<size_t>(atoi(env)) : VRAM_HEADROOM_PERCENT;
+        }
     }
 
     enum class LogLevel
@@ -48,14 +75,15 @@ namespace hip_shim
 
         void set_level(LogLevel level) { level_ = level; }
 
-        void enable_file_logging(const char *path = config::LOG_FILE_PATH)
+        void enable_file_logging(const char *path = nullptr)
         {
             std::lock_guard<std::mutex> lock(mutex_);
             if (log_file_)
             {
                 fclose(log_file_);
             }
-            fopen_s(&log_file_, path, "w");
+            const char* log_path = path ? path : config::get_log_file_path();
+            fopen_s(&log_file_, log_path, "w");
         }
 
         template <typename... Args>
@@ -91,7 +119,7 @@ namespace hip_shim
         }
 
     private:
-        Logger() : level_(config::ENABLE_DEBUG_LOGGING ? LogLevel::Debug : LogLevel::Info), log_file_(nullptr) {}
+        Logger() : level_(config::get_debug_logging_enabled() ? LogLevel::Debug : LogLevel::Info), log_file_(nullptr) {}
         LogLevel level_;
         FILE *log_file_;
         std::mutex mutex_;
