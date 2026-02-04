@@ -57,6 +57,54 @@ $env:HIP_PATH = "C:\Program Files\AMD\ROCm\7.1"
 .\scripts\install.ps1 -TargetPath "path\to\app\bin" -Restore
 ```
 
+## Test Results
+
+**Test System:**
+- CPU: AMD Ryzen 9 5900XT 16-Core
+- GPU: AMD Radeon RX 9070 XT (gfx1031, 16GB VRAM)
+- RAM: 96 GB
+- OS: Windows 11
+- ROCm: 7.1
+
+**Spoofed Configuration:**
+- Architecture: gfx1100 (RDNA3)
+- Total Memory: **117.91 GB** (24GB VRAM + 96GB system RAM)
+- Compute Units: 60
+- Clock: 2500 MHz / 16000 MHz (core/memory)
+
+**Test Results:** ✅ **ALL PASSED**
+
+| Test Category | Status | Details |
+|--------------|--------|---------|
+| Device Detection | ✅ PASS | Successfully enumerated 1 device |
+| Device Properties | ✅ PASS | Correctly spoofed to gfx1100 with 117.91 GB |
+| Memory Allocation | ✅ PASS | Small (100MB) and large (1GB) allocations successful |
+| Memory Operations | ✅ PASS | Host↔Device copies and verification working |
+| Stream Operations | ✅ PASS | Create, sync, destroy working correctly |
+| Event Operations | ✅ PASS | Create, record, sync, destroy working correctly |
+| Memory Tracking | ✅ PASS | Proper allocation/deallocation tracking, 0 leaks |
+
+See [TEST_RESULTS.md](TEST_RESULTS.md) for detailed logs and performance metrics.
+
+## Configuration
+
+The shim can be customized at runtime using environment variables (no rebuild needed):
+
+```powershell
+# DLL loading
+$env:HIP_SHIM_REAL_DLL = "amdhip64_7_real.dll"      # Real HIP DLL name
+$env:HIP_SHIM_ROCBLAS_DLL = "rocblas_real.dll"      # Real ROCBlas DLL name
+
+# Logging
+$env:HIP_SHIM_LOG_FILE = "hip_shim.log"              # Log file path
+$env:HIP_SHIM_DEBUG = "1"                            # Enable debug logging (1/0)
+
+# Memory
+$env:HIP_SHIM_VRAM_HEADROOM = "10"                   # VRAM reserve percentage
+```
+
+See [CONFIGURATION.md](CONFIGURATION.md) for full documentation.
+
 ## Troubleshooting
 
 Check `hip_shim.log` in the application directory for detailed logging.
