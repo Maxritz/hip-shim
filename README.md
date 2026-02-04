@@ -74,6 +74,59 @@ $env:HIP_PATH = "C:\Program Files\AMD\ROCm\7.1"
 
 **Test Results:** ✅ **ALL PASSED**
 
+```
+==================================================
+HIP Shim Test Program
+==================================================
+
+Found 1 HIP device(s)
+
+=== Device 0 Information ===
+hipGetDeviceProperties returned: 0 (no error)
+Name:              AMD Radeon RX 9070 XT
+Architecture:      gfx1100
+Total Memory:      117.91 GB
+Compute Units:     60
+Max Threads/Block: 1024
+Warp Size:         32
+Clock Rate:        2500 MHz
+Memory Clock:      16000 MHz
+Memory Bus Width:  192-bit
+Shared Mem/Block:  65536 bytes
+Regs/Block:        65536
+
+=== Testing Memory Allocation ===
+Free Memory:  97.74 GB
+Total Memory: 117.91 GB
+
+Allocating 100 MB...
+✓ Small allocation successful (ptr=0000000304000000)
+
+Allocating 1 GB...
+✓ Large allocation successful (ptr=000000030A400000)
+
+Testing memory operations...
+✓ Host to Device copy successful
+✓ Device to Host copy successful
+✓ Data verification: PASSED
+✓ Memory freed successfully
+
+=== Testing Stream Operations ===
+✓ Stream created
+✓ Stream synchronized
+✓ Stream destroyed
+
+=== Testing Event Operations ===
+✓ Event created
+✓ Event recorded
+✓ Event synchronized
+✓ Event destroyed
+
+==================================================
+All tests PASSED! ✓
+==================================================
+```
+
 | Test Category | Status | Details |
 |--------------|--------|---------|
 | Device Detection | ✅ PASS | Successfully enumerated 1 device |
